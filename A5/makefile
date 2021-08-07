@@ -1,6 +1,6 @@
 CC = gcc
 LD = gcc
-CFLAGS = -O3 -Wall -fopenmp -pthread
+CFLAGS = -std=gnu99 -O3 -Wall -fopenmp -pthread
 LDFLAGS = 
 RM = /bin/rm -f
 BIN = sparsemult matmult generator

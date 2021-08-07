@@ -150,7 +150,7 @@ void sparseMatmult(double *C, double *sparseA, double *sparseB, int nzA, int nzB
   
 
 
-  
+
 int main()
 {
     // Time Variables
@@ -159,8 +159,8 @@ int main()
 	double elapsed;
 
     // 64  128  256  512  1024  2048  4096  8192  16384  
-    int N = 2048;               // Size of the matrix
-    int nth = 16;               // Number of processing elements.
+    int N = 64;               // Size of the matrix
+    int nth = 8;               // Number of processing elements.
     int nzA = 0;                // Non-zero elements of matrix A
     int nzB = 0;                // Non-zero elements of matrix B
     double densRatioA;          // density ratio of the matrix A
@@ -241,10 +241,7 @@ int main()
     elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
     printf("elapsed time = %f seconds.\n", elapsed);
     printf("Number of cores used = %d \n", nth);
-    printf("Number of non-zero elements = %d \n", nzA);
-    printf("Total number of elements = %d \n", N*N);
-    printf("Density ratio of matrix A = %f \n", densRatioA);
-    printf("Density ratio of matrix B = %f \n", densRatioB);
+    printf("Matrix Size = %d \n", N);
 
     // Writing the content of matrix C (result), in a txt-file to be checked against the reference file.
     // writeFile("reference.txt", *C, N);

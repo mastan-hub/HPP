@@ -70,8 +70,9 @@ int main() {
   elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
   printf("elapsed time = %f seconds.\n", elapsed);
   printf("Number of cores used = %d \n", nth);
-
-  writeFile("reference.txt", *C, N);
+  printf("Matrix Size = %d \n", N);
+  
+  // writeFile("reference.txt", *C, N);
   free(A);
   free(B);
   free(C);
