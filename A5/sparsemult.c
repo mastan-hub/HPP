@@ -5,6 +5,7 @@
 #include <omp.h>
 #include <pthread.h>
 
+#define nth 16
 
 // Prints the matrix (Help function for developing the program).
 void printMat(double *M, int N){
@@ -91,6 +92,7 @@ void matmult(double *C, double *A, double *B, int N){
 void sparsifyA(double *M, double *sparseM, int N){
     int count = 0;
     int i, j;
+    #pragma omp parallel for private(i,j) shared(M)
     for (j = 0; j < N; ++j){
         for (i = 0; i < N; ++i) {
             if (M[i*N+j] != 0){
@@ -108,6 +110,7 @@ void sparsifyA(double *M, double *sparseM, int N){
 void sparsifyB(double *M, double *sparseM, int N){
     int count = 0;
     int i, j;
+    #pragma omp parallel for private(i,j) shared(M)
     for (i = 0; i < N; ++i) {
         for (j = 0; j < N; ++j){
             if (M[i*N+j] != 0){
@@ -126,7 +129,7 @@ void sparseMatmult(double *C, double *sparseA, double *sparseB, int nzA, int nzB
     #pragma omp parallel
     {
         int i,j, cash = 0, newcash = 0;
-        #pragma omp for private(i, j)
+        #pragma omp for private(i, j) schedule(static, ((nzA/nth)/N))
         for (i = 0; i < nzA; ++i){
             if (sparseA[i*3+1] > sparseA[((i-1)*3)+1]){
                 cash = newcash;
@@ -150,7 +153,6 @@ void sparseMatmult(double *C, double *sparseA, double *sparseB, int nzA, int nzB
   
 
 
-
 int main()
 {
     // Time Variables
@@ -159,12 +161,11 @@ int main()
 	double elapsed;
 
     // 64  128  256  512  1024  2048  4096  8192  16384  
-    int N = 64;               // Size of the matrix
-    int nth = 8;               // Number of processing elements.
+    int N = 8192;               // Size of the matrix
     int nzA = 0;                // Non-zero elements of matrix A
     int nzB = 0;                // Non-zero elements of matrix B
-    double densRatioA;          // density ratio of the matrix A
-    double densRatioB;          // density ratio of the matrix B
+    double densRatioA = 0;          // density ratio of the matrix A
+    double densRatioB = 0;          // density ratio of the matrix B
 
     // Initializing matrix variables
     double (*A)[N], (*B)[N], (*C)[N], (*sparseA)[3], (*sparseB)[3];
@@ -174,15 +175,15 @@ int main()
     A = (double(*)[N])malloc(sizeof(*A) * N);
     B = (double(*)[N])malloc(sizeof(*B) * N);
     C = (double(*)[N])malloc(sizeof(*C) * N);
-    #pragma omp sections
+    #pragma omp parallel sections
     {
         #pragma omp section
         {
-            readFile("A-2048.txt", *A, N);
+            readFile("A-8192.txt", *A, N);
         }
         #pragma omp section
         {
-            readFile("B-2048.txt", *B, N);
+            readFile("B-8192.txt", *B, N);
         }
     }
 
@@ -195,7 +196,7 @@ int main()
     gettimeofday(&tv1, &tz);
 
     // Counting how many non-zero elements there are in each of the matrices A and B.
-    #pragma omp sections
+    #pragma omp parallel sections
     {
         #pragma omp section
         {
@@ -217,7 +218,7 @@ int main()
         // Changing the matrices A and B to sparse formate.
         sparseA = (double(*)[3])malloc(sizeof(*sparseA) * nzA);
         sparseB = (double(*)[3])malloc(sizeof(*sparseB) * nzB);
-        #pragma omp sections
+        #pragma omp parallel sections
         {
             #pragma omp section
             {
@@ -242,9 +243,10 @@ int main()
     printf("elapsed time = %f seconds.\n", elapsed);
     printf("Number of cores used = %d \n", nth);
     printf("Matrix Size = %d \n", N);
+    printf("Matrix Size = %d \n", nzA);
 
     // Writing the content of matrix C (result), in a txt-file to be checked against the reference file.
-    // writeFile("reference.txt", *C, N);
+    writeFile("reference.txt", *C, N);
 
 
     // Freeing the used memory.

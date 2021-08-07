@@ -71,7 +71,7 @@ int main() {
   printf("elapsed time = %f seconds.\n", elapsed);
   printf("Number of cores used = %d \n", nth);
   printf("Matrix Size = %d \n", N);
-  
+
   // writeFile("reference.txt", *C, N);
   free(A);
   free(B);
