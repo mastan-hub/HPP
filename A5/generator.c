@@ -41,7 +41,7 @@ void readFile(char* fname, double *A, int N)
 int main(int argc, char* argv[]){
 
     // 64  128  256  512  1024  2048  4096  8192  16384  
-	int N = 4096;	
+	int N = 16384;	
 	double(*A)[N], (*B)[N], (*C)[N];
 
 	A = (double(*)[N])malloc(sizeof(*A) * N);
@@ -66,6 +66,5 @@ int main(int argc, char* argv[]){
 
 
 */
-
 
 

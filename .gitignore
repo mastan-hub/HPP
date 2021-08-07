@@ -1,8 +1,6 @@
 A5/txtFiles
-A5/A.txt
-A5/Amat.txt 
-A5/B.txt
-A5/Bmat.txt
-A5/C.txt
-A5/Cmat.txt
+A5/A-2048.txt
+A5/B-2048.txt
+A5/C-2048.txtA5/txtFiles/16k A5/txtFiles/A-1024.txt A5/txtFiles/A-128.txt A5/txtFiles/A-2048.txt A5/txtFiles/A-256.txt A5/txtFiles/A-4096.txt A5/txtFiles/A-512.txt A5/txtFiles/A-64.txt A5/txtFiles/A-8192.txt A5/txtFiles/B-1024.txt A5/txtFiles/B-128.txt A5/txtFiles/B-2048.txt A5/txtFiles/B-256.txt A5/txtFiles/B-4096.txt A5/txtFiles/B-512.txt A5/txtFiles/B-64.txt A5/txtFiles/B-8192.txt A5/txtFiles/C-1024.txt A5/txtFiles/C-128.txt A5/txtFiles/C-2048.txt A5/txtFiles/C-256.txt A5/txtFiles/C-4096.txt A5/txtFiles/C-512.txt A5/txtFiles/C-64.txt A5/txtFiles/C-8192.txt A5/txtFiles/LS.c A5/txtFiles/LS2.c
 A5/reference.txt
+A5/C-2048.txt

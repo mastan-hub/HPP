@@ -178,3 +178,64 @@ printf("%f ", B[i][j]);
 printf("%20s", "");
 
 */
+
+
+
+/*
+
+
+        int i,j;
+        #pragma omp parallel for private(i,j) shared(sparseA, sparseB, C)
+        for (i = 0; i < nzA; ++i){
+            for (j = 0; j < nzB; ++j){
+                if (sparseA[i][1] == sparseB[j][0]){
+                    if (C[(int)sparseA[i][0]][ (int)sparseB[j][0]] == 0){
+                        C[(int)sparseA[i][0]][ (int)sparseB[j][0]]  = sparseA[i][2]*sparseB[j][2];
+                    } else {
+                        C[(int)sparseA[i][0]][ (int)sparseB[j][0]] += sparseA[i][2]*sparseB[j][2];
+                    }
+                }
+            }
+        }
+
+
+
+
+
+// Multiplies the two sparse matrix A and B and saves the result in C.
+void sparseMatmult2(double *C, double *sparseA, double *sparseB, int nzA, int nzB, int N){
+    int i,j;
+    #pragma omp parallel for private(i,j) shared(C)
+    for (i = 0; i < nzA; ++i){
+        for (j = 0; j < nzB; ++j){
+            if(sparseA[i*3+1] == sparseB[j*3]){
+                if (C[(int) (sparseA[i*3] * N + sparseB[j*3+1])] == 0){
+                    C[(int) (sparseA[i*3] * N + sparseB[j*3+1])] = sparseA[i*3+2]*sparseB[j*3+2];
+                } else {
+                    C[(int) (sparseA[i*3] * N + sparseB[j*3+1])] += sparseA[i*3+2]*sparseB[j*3+2];
+                }
+            }
+        }
+    }
+}
+
+// Multiplies the two sparse matrix A and B and saves the result in C.
+void sparseMatmult(double *C, double *sparseA, double *sparseB, int nzA, int nzB, int N){
+    int i,j;
+    #pragma omp parallel for private(i, j) shared(sparseA, sparseB, C)
+    for (i = 0; i < nzA; ++i){
+        for (j = 0; j < nzB; ++j){
+            if(sparseA[i*3+1] == sparseB[j*3]){
+                #pragma omp atomic
+                C[(int) (sparseA[i*3]*N+sparseB[j*3+1])] += sparseA[i*3+2]*sparseB[j*3+2];
+            } else if (sparseB[j*3] > sparseA[i*3+1]){
+                break;
+            }
+        }
+    }
+    free(sparseA);
+    free(sparseB);
+}
+
+
+*/

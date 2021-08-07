@@ -51,8 +51,8 @@ int main() {
   B = (double(*)[N])malloc(sizeof(*B) * N);
   C = (double(*)[N])malloc(sizeof(*C) * N);
 
-  readFile("A.txt", *A, N);
-  readFile("B.txt", *B, N);
+  readFile("A-2048.txt", *A, N);
+  readFile("B-2048.txt", *B, N);
 
   gettimeofday(&tv1, &tz);
 
