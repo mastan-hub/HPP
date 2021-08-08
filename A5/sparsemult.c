@@ -129,7 +129,12 @@ void sparseMatmult(double *C, double *sparseA, double *sparseB, int nzA, int nzB
     #pragma omp parallel
     {
         int i,j, cash = 0, newcash = 0;
-        #pragma omp for private(i, j) schedule(static, ((nzA/nth)/N))
+        if (nth <= 4){
+            omp_set_schedule(omp_sched_dynamic, N/10);
+        } else {
+            omp_set_schedule(omp_sched_static, N/10);
+        }
+        #pragma omp for private(i, j) schedule(runtime)
         for (i = 0; i < nzA; ++i){
             if (sparseA[i*3+1] > sparseA[((i-1)*3)+1]){
                 cash = newcash;
@@ -161,7 +166,7 @@ int main()
 	double elapsed;
 
     // 64  128  256  512  1024  2048  4096  8192  16384  
-    int N = 8192;               // Size of the matrix
+    int N = 256;               // Size of the matrix
     int nzA = 0;                // Non-zero elements of matrix A
     int nzB = 0;                // Non-zero elements of matrix B
     double densRatioA = 0;          // density ratio of the matrix A
@@ -179,11 +184,11 @@ int main()
     {
         #pragma omp section
         {
-            readFile("A-8192.txt", *A, N);
+            readFile("A-256.txt", *A, N);
         }
         #pragma omp section
         {
-            readFile("B-8192.txt", *B, N);
+            readFile("B-256.txt", *B, N);
         }
     }
 
@@ -243,8 +248,7 @@ int main()
     printf("elapsed time = %f seconds.\n", elapsed);
     printf("Number of cores used = %d \n", nth);
     printf("Matrix Size = %d \n", N);
-    printf("Matrix Size = %d \n", nzA);
-
+    
     // Writing the content of matrix C (result), in a txt-file to be checked against the reference file.
     writeFile("reference.txt", *C, N);
 
