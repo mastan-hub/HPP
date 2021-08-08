@@ -5,7 +5,7 @@
 #include <omp.h>
 #include <pthread.h>
 
-#define nth 16
+#define nth 1
 
 // Prints the matrix (Help function for developing the program).
 void printMat(double *M, int N){
@@ -166,7 +166,7 @@ int main()
 	double elapsed;
 
     // 64  128  256  512  1024  2048  4096  8192  16384  
-    int N = 256;               // Size of the matrix
+    int N = 2048;               // Size of the matrix
     int nzA = 0;                // Non-zero elements of matrix A
     int nzB = 0;                // Non-zero elements of matrix B
     double densRatioA = 0;          // density ratio of the matrix A
@@ -184,11 +184,11 @@ int main()
     {
         #pragma omp section
         {
-            readFile("A-256.txt", *A, N);
+            readFile("A-2048.txt", *A, N);
         }
         #pragma omp section
         {
-            readFile("B-256.txt", *B, N);
+            readFile("B-2048.txt", *B, N);
         }
     }
 
@@ -250,7 +250,7 @@ int main()
     printf("Matrix Size = %d \n", N);
     
     // Writing the content of matrix C (result), in a txt-file to be checked against the reference file.
-    writeFile("reference.txt", *C, N);
+    // writeFile("reference.txt", *C, N);
 
 
     // Freeing the used memory.
